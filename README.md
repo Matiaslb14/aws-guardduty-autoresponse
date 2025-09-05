@@ -77,8 +77,7 @@ aws guardduty create-sample-findings --detector-id "$DET" --region us-east-1
 
 📸 Evidence
 
-## Evidence  
-
+## Evidence
 <p align="center">
   <img src="./images/cloudwatch.png" alt="CloudWatch Logs" width="700"/>
 </p>
@@ -90,7 +89,6 @@ aws guardduty create-sample-findings --detector-id "$DET" --region us-east-1
 <p align="center">
   <img src="./images/sns-email.png" alt="SNS Email" width="700"/>
 </p>
-
 
 🔮 Next Steps / Improvements
 
