@@ -73,16 +73,11 @@ With GuardDuty (once enabled)
 DET=$(aws guardduty list-detectors --region us-east-1 --query 'DetectorIds[0]' --output text)
 aws guardduty create-sample-findings --detector-id "$DET" --region us-east-1
 
-## 📸 Evidence
-
-**1. CloudWatch Logs** – Lambda execution confirming the IP extraction and block.  
+ ## 📸 Evidence
 ![CloudWatch Logs](images/cloudwatch.png)  
-
-**2. WAF IPSet** – Attacker IP automatically added to the blocked list.  
 ![WAF IPSet](images/waf-ipset.png)  
+![SNS Email](images/sns-email.png)
 
-**3. SNS Email** – Email alert received with incident details.  
-![SNS Email](images/sns-email.png)  
 
 
 🔮 Next Steps / Improvements
