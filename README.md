@@ -1,46 +1,48 @@
 # 🛡️ AWS GuardDuty Auto-Response with WAF + Lambda + SNS
 
-## 🚀 Overview
-This project implements an automated incident response pipeline in AWS:
+A serverless pipeline that implements automated incident response in AWS using **GuardDuty, EventBridge, Lambda, WAFv2 and SNS**.
 
-- GuardDuty detects malicious activity (e.g., suspicious connections, brute force).
-- EventBridge triggers a Lambda function.
-- The Lambda function automatically:
-  - Extracts the attacker IP.
-  - Updates an AWS WAFv2 IPSet to block the IP.
-  - Sends an SNS notification (email alert).
+## 🚀 What it does
+- 🔍 GuardDuty detects malicious activity (e.g., suspicious connections, brute force).  
+- ⏭️ EventBridge triggers a Lambda function.  
+- 🐍 The Lambda function:
+  - Extracts the attacker IP.  
+  - Updates an AWS WAFv2 IPSet to block the IP.  
+  - Sends an SNS notification (email alert).  
+- ✅ Demonstrates a **SOAR-like workflow** (Security Orchestration, Automation and Response).  
 
-✅ Demonstrates a SOAR-like (Security Orchestration, Automation and Response) workflow using serverless and IaC.
+## 📂 Repository structure
 
----
+.
+├── lambda/ # Lambda function (Python)
+├── terraform/ # Terraform IaC for SNS, WAF, IAM, Lambda
+│ ├── main.tf
+│ ├── variables.tf
+│ ├── outputs.tf
+│ └── terraform.tfstate (ignored in VCS)
+├── event-test.json # Sample event to test Lambda manually
+└── README.md
 
-## 🏗️ Architecture
 
-[GuardDuty] --> [EventBridge Rule] --> [Lambda Function] --> [WAFv2 IPSet]
-↘
-[SNS Email Alerts]
+## ⚙️ Prerequisites
+- ☁️ AWS account with GuardDuty enabled.  
+- 📦 Terraform installed (`>=1.5`).  
+- 🔑 AWS CLI configured with a profile (Access Key + Secret).  
+- 📧 Verified email address in Amazon SNS.  
 
+## 🛠️ Getting started
 
-- **Terraform** → Infrastructure as Code (SNS, WAF, Lambda, IAM)  
-- **Lambda (Python 3.11)** → logic for blocking IPs + notifications  
-- **SNS** → email alerts  
-- **WAF** → automatic IP blocking  
-
----
-
-## ⚙️ Deployment
-
-### 1. Clone repository
+### 1️⃣ Clone repository
 ```bash
 git clone https://github.com/Matiaslb14/aws-guardduty-autoresponse.git
 cd aws-guardduty-autoresponse/terraform
 
-2. Initialize & validate
+2️⃣ Initialize & validate
 
 terraform init
 terraform validate
 
-3. Apply
+3️⃣ Apply
 
 terraform apply -auto-approve \
   -var alert_email="youremail@example.com" \
@@ -48,12 +50,11 @@ terraform apply -auto-approve \
   -var aws_profile="your-aws-profile" \
   -var waf_scope="REGIONAL"
 
-➡️ Confirm the subscription email from AWS SNS.
+📩 Confirm the subscription email from AWS SNS.
 
 🧪 Testing
-Manual Test (without GuardDuty)
 
-You can simulate an event to validate the Lambda function:
+🔹 Manual Test (without GuardDuty)
 
 aws lambda invoke \
   --function-name gd-autoresponse-waf \
@@ -63,51 +64,36 @@ aws lambda invoke \
 
 Check:
 
-IP appears in the WAF IPSet.
+✅ IP appears in the WAF IPSet.
 
-Alert received by SNS email.
+✅ Alert received by SNS email.
 
-Logs in CloudWatch confirm execution.
+✅ Logs in CloudWatch confirm execution.
 
-With GuardDuty (once enabled)
+🔹 With GuardDuty (once enabled)
+
 DET=$(aws guardduty list-detectors --region us-east-1 --query 'DetectorIds[0]' --output text)
 aws guardduty create-sample-findings --detector-id "$DET" --region us-east-1
 
- ## 📸 Evidence
-![CloudWatch Logs](images/cloudwatch.png)  
-![WAF IPSet](images/waf-ipset.png)  
-![SNS Email](images/sns-email.png)
+🔮 Next steps
 
+⏱️ Add DynamoDB TTL for temporary bans (auto-expire IPs after X hours).
 
+🌐 Associate WAF Web ACL to ALB / API Gateway / CloudFront.
 
-🔮 Next Steps / Improvements
+💬 Multi-channel notifications (Slack / Teams).
 
-Add DynamoDB TTL for temporary bans (auto-expire IPs after X hours).
+🧪 Add automated tests with pytest for Lambda.
 
-Associate WAF Web ACL to ALB / API Gateway / CloudFront.
+📚 Skills demonstrated
 
-Multi-channel notifications (Slack / Teams).
+🛡️ AWS Security: GuardDuty, WAFv2, SNS, Lambda
 
-Add automated tests with pytest for Lambda.
+⚙️ Automation: Python + Terraform (IaC)
 
-📚 Skills Demonstrated
+☁️ Cloud Security Engineering: detection → response → notification
 
-AWS Security: GuardDuty, WAFv2, SNS, Lambda
-
-Automation: Python + Terraform (IaC)
-
-Cloud Security Engineering: detection → response → notification
-
-SOAR mindset: automated incident response pipeline
-
-
-
-
-
-
-
-
-
+🤖 SOAR mindset: automated incident response pipeline
 
 
 
