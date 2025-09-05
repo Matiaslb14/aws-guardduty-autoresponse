@@ -32,7 +32,7 @@ A serverless pipeline that implements automated incident response in AWS using *
 
 ## 🛠️ Getting started
 
-### 1️⃣ Clone repository
+1️⃣ Clone repository
 ```bash
 git clone https://github.com/Matiaslb14/aws-guardduty-autoresponse.git
 cd aws-guardduty-autoresponse/terraform
