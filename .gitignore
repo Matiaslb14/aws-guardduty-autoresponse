@@ -1,0 +1,19 @@
+# === Terraform ===
+**/.terraform/*
+*.tfstate
+*.tfstate.*
+crash.log
+override.tf
+terraform.tfvars
+# (sí queremos versionar el lock)
+#! .terraform.lock.hcl
+
+# Cache de providers (no subir)
+terraform/.terraform/
+
+# === Lambda build artifact ===
+lambda.zip
+
+# === Python ===
+__pycache__/
+*.pyc

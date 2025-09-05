@@ -1,0 +1,11 @@
+{
+  "detail": {
+    "service": {
+      "action": {
+        "networkConnectionAction": {
+          "remoteIpDetails": { "ipAddressV4": "203.0.113.45" }
+        }
+      }
+    }
+  }
+}
