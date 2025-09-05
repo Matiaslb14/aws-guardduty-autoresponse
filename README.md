@@ -1,7 +1,8 @@
 # 🛡️ AWS GuardDuty Auto-Response with WAF + Lambda + SNS
 
 ## 🚀 Overview
-This project implements an **automated incident response pipeline in AWS**:
+This project implements an automated incident response pipeline in AWS:
+
 - GuardDuty detects malicious activity (e.g., suspicious connections, brute force).
 - EventBridge triggers a Lambda function.
 - The Lambda function automatically:
@@ -9,31 +10,30 @@ This project implements an **automated incident response pipeline in AWS**:
   - Updates an AWS WAFv2 IPSet to block the IP.
   - Sends an SNS notification (email alert).
 
-✅ Demonstrates a **SOAR-like (Security Orchestration, Automation and Response)** workflow using serverless and IaC.
+✅ Demonstrates a SOAR-like (Security Orchestration, Automation and Response) workflow using serverless and IaC.
 
 ---
 
 ## 🏗️ Architecture
 
-```text
 [GuardDuty] --> [EventBridge Rule] --> [Lambda Function] --> [WAFv2 IPSet]
-                                                      ↘
-                                                        [SNS Email Alerts]
+↘
+[SNS Email Alerts]
 
-Terraform → Infrastructure as Code (SNS, WAF, Lambda, IAM).
 
-Lambda (Python 3.11) → logic for blocking IPs + notifications.
+- **Terraform** → Infrastructure as Code (SNS, WAF, Lambda, IAM)  
+- **Lambda (Python 3.11)** → logic for blocking IPs + notifications  
+- **SNS** → email alerts  
+- **WAF** → automatic IP blocking  
 
-SNS → email alerts.
+---
 
-WAF → automatic IP blocking.
+## ⚙️ Deployment
 
-⚙️ Deployment
-
-1. Clone repository
-
-git clone https://github.com/Matiaslb14/guardduty-autoresponse.git
-cd guardduty-autoresponse/terraform
+### 1. Clone repository
+```bash
+git clone https://github.com/Matiaslb14/aws-guardduty-autoresponse.git
+cd aws-guardduty-autoresponse/terraform
 
 2. Initialize & validate
 
@@ -48,10 +48,9 @@ terraform apply -auto-approve \
   -var aws_profile="your-aws-profile" \
   -var waf_scope="REGIONAL"
 
-Confirm the subscription email from AWS SNS.
+➡️ Confirm the subscription email from AWS SNS.
 
 🧪 Testing
-
 Manual Test (without GuardDuty)
 
 You can simulate an event to validate the Lambda function:
@@ -71,16 +70,20 @@ Alert received by SNS email.
 Logs in CloudWatch confirm execution.
 
 With GuardDuty (once enabled)
-
 DET=$(aws guardduty list-detectors --region us-east-1 --query 'DetectorIds[0]' --output text)
 aws guardduty create-sample-findings --detector-id "$DET" --region us-east-1
 
-📸 Evidence
-## Evidence
+## 📸 Evidence
 
-![CloudWatch Logs](images/cloudwatch.png)
-![WAF IPSet](images/waf-ipset.png)
-![SNS Email](images/sns-email.png)
+**1. CloudWatch Logs** – Lambda execution confirming the IP extraction and block.  
+![CloudWatch Logs](images/cloudwatch.png)  
+
+**2. WAF IPSet** – Attacker IP automatically added to the blocked list.  
+![WAF IPSet](images/waf-ipset.png)  
+
+**3. SNS Email** – Email alert received with incident details.  
+![SNS Email](images/sns-email.png)  
+
 
 🔮 Next Steps / Improvements
 
@@ -94,17 +97,22 @@ Add automated tests with pytest for Lambda.
 
 📚 Skills Demonstrated
 
-AWS Security: GuardDuty, WAFv2, SNS, Lambda.
+AWS Security: GuardDuty, WAFv2, SNS, Lambda
 
-Automation: Python + Terraform (IaC).
+Automation: Python + Terraform (IaC)
 
-Cloud Security Engineering: detection → response → notification.
+Cloud Security Engineering: detection → response → notification
 
-SOAR mindset: automated incident response pipeline.
+SOAR mindset: automated incident response pipeline
 
-👨‍💻 Author
 
-Matías Lagos
+
+
+
+
+
+
+
 
 
 
